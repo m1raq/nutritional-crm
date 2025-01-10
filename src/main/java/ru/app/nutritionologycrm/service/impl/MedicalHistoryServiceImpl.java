@@ -15,9 +15,8 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     private final MedicalHistoryRepository medicalHistoryRepository;
 
     @Autowired
-    public MedicalHistoryServiceImpl(MedicalHistoryRepository medicalHistoryRepository, Forms formsService) {
+    public MedicalHistoryServiceImpl(MedicalHistoryRepository medicalHistoryRepository) {
         this.medicalHistoryRepository = medicalHistoryRepository;
-        this.formsService = formsService;
     }
 
     @Override
