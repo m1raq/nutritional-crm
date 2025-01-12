@@ -1,16 +1,18 @@
 package ru.app.nutritionologycrm.controller;
 
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.app.nutritionologycrm.dto.security.JwtAuthResponseDTO;
-import ru.app.nutritionologycrm.dto.security.LoginRequestDTO;
-import ru.app.nutritionologycrm.dto.security.RegisterRequestDTO;
-import ru.app.nutritionologycrm.security.service.AuthService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.app.nutritionologycrm.dto.ResponseMessageDTO;
+import ru.app.nutritionologycrm.entity.RoleType;
+import ru.app.nutritionologycrm.security.SecurityService;
+import ru.app.nutritionologycrm.dto.security.AuthRequestDTO;
+import ru.app.nutritionologycrm.dto.security.AuthResponseDTO;
+import ru.app.nutritionologycrm.dto.security.RefreshTokenRequestDTO;
+import ru.app.nutritionologycrm.dto.security.RefreshTokenResponseDTO;
 
 
 @Slf4j
@@ -18,20 +20,56 @@ import ru.app.nutritionologycrm.security.service.AuthService;
 @RestController
 public class AuthController {
 
-    private final AuthService authService;
+    private final SecurityService securityService;
 
     @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    public AuthController(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
-    @PostMapping("/sign-up")
-    public JwtAuthResponseDTO signUp(@RequestBody @Valid RegisterRequestDTO request) {
-        return authService.signUp(request);
+
+    @Operation(
+            summary = "Регистрация пользователя",
+            description = """
+                    Введите адрес эл.почты и пароль.
+                    
+                    Можно зарегистрироваться, как исполнитель & заказчик.
+                    При повторной регистрации с одной из двух сторон необходимо вводить данные, введенные при первичной
+                    регистрации.
+                    
+                    Варианты параметра role:\s
+                    - executor - исполнитель
+                    - customer - заказчик
+                    """
+    )
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody AuthRequestDTO authRequestDTO,
+                                      @RequestParam RoleType role) {
+        securityService.register(authRequestDTO);
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
+                .message("Регистрация прошла успешно")
+                .build(), HttpStatus.OK);
     }
 
-    @PostMapping("/sign-in")
-    public JwtAuthResponseDTO signIn(@RequestBody @Valid LoginRequestDTO request) {
-        return authService.signIn(request);
+
+    @Operation(
+            summary = "Логин",
+            description = "Введите адрес эл.почты и пароль." +
+                    " Из ответа использовать token для Bearer аунтефикации при дальнейших запросах"
+    )
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO authRequestDTO) {
+        return new ResponseEntity<>(securityService.authenticateUser(authRequestDTO), HttpStatus.OK);
     }
+
+
+    @Operation(
+            summary = "Обновить токен"
+    )
+    @PutMapping("/refresh-token")
+    public ResponseEntity<RefreshTokenResponseDTO> refreshToken
+            (@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) {
+        return new ResponseEntity<>(securityService.refreshToken(refreshTokenRequestDTO), HttpStatus.OK);
+    }
+
 }
