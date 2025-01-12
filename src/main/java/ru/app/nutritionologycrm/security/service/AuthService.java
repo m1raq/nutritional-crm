@@ -6,9 +6,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.app.nutritionologycrm.dto.JwtAuthResponseDTO;
-import ru.app.nutritionologycrm.dto.LoginRequestDTO;
-import ru.app.nutritionologycrm.dto.RegisterRequestDTO;
+import ru.app.nutritionologycrm.dto.security.JwtAuthResponseDTO;
+import ru.app.nutritionologycrm.dto.security.LoginRequestDTO;
+import ru.app.nutritionologycrm.dto.security.RegisterRequestDTO;
 import ru.app.nutritionologycrm.entity.RoleType;
 import ru.app.nutritionologycrm.entity.UserEntity;
 import ru.app.nutritionologycrm.service.UserService;
