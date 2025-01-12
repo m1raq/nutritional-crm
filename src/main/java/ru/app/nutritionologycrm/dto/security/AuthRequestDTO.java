@@ -1,11 +1,9 @@
 package ru.app.nutritionologycrm.dto.security;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class RegisterRequestDTO {
+public class AuthRequestDTO {
 
     private String username;
 
