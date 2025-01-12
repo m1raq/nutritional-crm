@@ -55,5 +55,8 @@ public class ClientEntity {
     @OneToMany(mappedBy = "client")
     private List<RecommendationEntity> recommendations;
 
+    @Column(name = "documents_id")
+    @OneToMany(mappedBy = "client")
+    private List<DocumentEntity> documents;
 
 }

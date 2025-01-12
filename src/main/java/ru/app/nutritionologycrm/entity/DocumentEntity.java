@@ -18,10 +18,20 @@ public class DocumentEntity {
     @Id
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @CreationTimestamp
     private Date date;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
+
+
 
 }

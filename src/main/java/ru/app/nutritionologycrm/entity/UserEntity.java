@@ -44,6 +44,10 @@ public class UserEntity implements UserDetails {
     @Column(name = "meet_id")
     private List<MeetEntity> meets;
 
+    @Column(name = "documents_id")
+    @OneToMany(mappedBy = "client")
+    private List<DocumentEntity> documents;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private RoleType role;
