@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.app.nutritionologycrm.dto.client.ClientCreateRequestDTO;
-import ru.app.nutritionologycrm.dto.ResponseMessage;
+import ru.app.nutritionologycrm.dto.ResponseMessageDTO;
 import ru.app.nutritionologycrm.dto.client.ClientUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.ClientEntity;
 import ru.app.nutritionologycrm.service.ClientService;
@@ -24,27 +24,27 @@ public class ClientController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseMessage> createClient(@RequestBody ClientCreateRequestDTO client) {
+    public ResponseEntity<ResponseMessageDTO> createClient(@RequestBody ClientCreateRequestDTO client) {
         clientService.saveClient(client);
-        return new ResponseEntity<>(ResponseMessage.builder()
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .message("Client is created")
                 .success(true)
                 .build(), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseMessage> updateClient(@RequestBody ClientUpdateRequestDTO client) {
+    public ResponseEntity<ResponseMessageDTO> updateClient(@RequestBody ClientUpdateRequestDTO client) {
         clientService.updateClient(client);
-        return new ResponseEntity<>(ResponseMessage.builder()
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .message("Client is updated")
                 .success(true)
                 .build(), HttpStatus.OK);
     }
 
     @PutMapping("/update-status")
-    public ResponseEntity<ResponseMessage> updateClientStatus(@RequestParam Long id, @RequestParam String status) {
+    public ResponseEntity<ResponseMessageDTO> updateClientStatus(@RequestParam Long id, @RequestParam String status) {
         clientService.updateClientStatus(id, status);
-        return new ResponseEntity<>(ResponseMessage.builder()
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .message("Client status is updated")
                 .build(), HttpStatus.OK);
     }

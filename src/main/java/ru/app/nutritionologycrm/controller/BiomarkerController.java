@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.app.nutritionologycrm.dto.ResponseMessage;
+import ru.app.nutritionologycrm.dto.ResponseMessageDTO;
 import ru.app.nutritionologycrm.dto.biomarker.BiomarkerCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.biomarker.BiomarkerUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.BiomarkerEntity;
@@ -24,18 +24,18 @@ public class BiomarkerController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseMessage> create(@RequestBody BiomarkerCreateRequestDTO request) {
+    public ResponseEntity<ResponseMessageDTO> create(@RequestBody BiomarkerCreateRequestDTO request) {
         biomarkerService.saveBiomarker(request);
-        return new ResponseEntity<>(ResponseMessage.builder()
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .success(true)
                 .message("Biomarker is created")
                 .build(), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseMessage> update(@RequestBody BiomarkerUpdateRequestDTO request) {
+    public ResponseEntity<ResponseMessageDTO> update(@RequestBody BiomarkerUpdateRequestDTO request) {
         biomarkerService.updateBiomarker(request);
-        return new ResponseEntity<>(ResponseMessage.builder()
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .success(true)
                 .message("Biomarker is updated")
                 .build(), HttpStatus.OK);

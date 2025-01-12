@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.app.nutritionologycrm.dto.ResponseMessage;
+import ru.app.nutritionologycrm.dto.ResponseMessageDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.MedicalHistoryEntity;
@@ -24,19 +24,19 @@ public class MedicalHistoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseMessage> createMedicalHistory(@RequestBody MedicalHistoryCreateRequestDTO request
+    public ResponseEntity<ResponseMessageDTO> createMedicalHistory(@RequestBody MedicalHistoryCreateRequestDTO request
             , @RequestParam Long clientId ) {
         medicalHistoryService.saveMedicalHistory(request, clientId);
-        return new ResponseEntity<>(ResponseMessage.builder()
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .message("Medical history is created")
                 .success(true)
                 .build(), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseMessage> updateMedicalHistory(@RequestBody MedicalHistoryUpdateRequestDTO request) {
+    public ResponseEntity<ResponseMessageDTO> updateMedicalHistory(@RequestBody MedicalHistoryUpdateRequestDTO request) {
         medicalHistoryService.updateMedicalHistory(request);
-        return new ResponseEntity<>(ResponseMessage.builder()
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .message("Medical history is updated")
                 .success(true)
                 .build(), HttpStatus.OK);
@@ -58,8 +58,8 @@ public class MedicalHistoryController {
     }
 
     @PostMapping("/create-google-form")
-    public ResponseEntity<ResponseMessage> createGoogleForm() {
-        return new ResponseEntity<>(ResponseMessage.builder()
+    public ResponseEntity<ResponseMessageDTO> createGoogleForm() {
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .message("Google form is created")
                 .features(medicalHistoryService.createMedicalHistoryQuestionnaire())
                 .success(true)

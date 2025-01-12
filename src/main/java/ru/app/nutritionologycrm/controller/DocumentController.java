@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.app.nutritionologycrm.dto.ResponseMessage;
+import ru.app.nutritionologycrm.dto.ResponseMessageDTO;
 import ru.app.nutritionologycrm.entity.DocumentEntity;
 import ru.app.nutritionologycrm.service.DocumentService;
 
@@ -25,9 +25,9 @@ public class DocumentController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<ResponseMessage> upload(@RequestParam MultipartFile file, @RequestParam Long clientId) {
+    public ResponseEntity<ResponseMessageDTO> upload(@RequestParam MultipartFile file, @RequestParam Long clientId) {
         documentService.save(file, clientId);
-        return new ResponseEntity<>(ResponseMessage.builder()
+        return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .message("File is uploaded successfully")
                 .success(true)
                 .build()
