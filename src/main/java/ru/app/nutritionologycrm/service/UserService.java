@@ -13,7 +13,7 @@ public interface UserService {
 
     void saveUser(UserEntity user);
 
-    UserEntity findByEmail(String username);
+    UserEntity findByUsername(String username);
 
     void deleteUserById(Long id);
 

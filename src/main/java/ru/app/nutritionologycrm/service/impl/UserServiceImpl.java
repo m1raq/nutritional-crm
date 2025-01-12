@@ -43,9 +43,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity findByEmail(String username) {
+    public UserEntity findByUsername(String username) {
         log.info("Attempt to load user by username: {}", username);
-        return userRepository.findByEmail(username);
+        return userRepository.findByUsername(username);
     }
 
     @Override
@@ -56,12 +56,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailsService userDetailsService() {
-        return this::findByEmail;
+        return this::findByUsername;
     }
 
     @Override
     public UserEntity getCurrentUser() {
-        return findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
 
