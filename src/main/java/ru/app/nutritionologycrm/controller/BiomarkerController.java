@@ -12,7 +12,7 @@ import ru.app.nutritionologycrm.service.BiomarkerService;
 
 import java.util.List;
 
-@RequestMapping("/biomarker")
+@RequestMapping("/api/v1/biomarker")
 @RestController
 public class BiomarkerController {
 
