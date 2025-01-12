@@ -3,7 +3,7 @@ package ru.app.nutritionologycrm.config;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.drive.Drive;
+//import com.google.api.services.drive.Drive;
 import com.google.api.services.forms.v1.Forms;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,13 +25,13 @@ public class GoogleConfig {
                 .build();
     }
 
-    @Bean
-    public Drive driveService() throws GeneralSecurityException, IOException {
-        return new Drive.Builder(GoogleNetHttpTransport.newTrustedTransport()
-                , JacksonFactory.getDefaultInstance()
-                , null)
-                .setApplicationName("nutritionologycrm")
-                .build();
-    }
+//    @Bean
+//    public Drive driveService() throws GeneralSecurityException, IOException {
+//        return new Drive.Builder(GoogleNetHttpTransport.newTrustedTransport()
+//                , JacksonFactory.getDefaultInstance()
+//                , null)
+//                .setApplicationName("nutritionologycrm")
+//                .build();
+//    }
 
 }
