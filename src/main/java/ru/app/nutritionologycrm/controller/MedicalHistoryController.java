@@ -42,17 +42,17 @@ public class MedicalHistoryController {
                 .build(), HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-medical-histories")
+    @GetMapping("/get-all")
     public ResponseEntity<List<MedicalHistoryEntity>> getAllMedicalHistory() {
         return new ResponseEntity<>(medicalHistoryService.findAllMedicalHistoriesByCurrentUser(), HttpStatus.OK);
     }
 
-    @GetMapping("/get-medical-histories-by-client-id")
+    @GetMapping("/get-by-client-id")
     public ResponseEntity<List<MedicalHistoryEntity>> getMedicalHistory(@RequestParam Long clientId) {
         return new ResponseEntity<>(medicalHistoryService.findAllByClientId(clientId), HttpStatus.OK);
     }
 
-    @GetMapping("/get-medical-histories-by-id")
+    @GetMapping("/get-by-id")
     public ResponseEntity<MedicalHistoryEntity> getMedicalHistoryById(@RequestParam Long id) {
         return new ResponseEntity<>(medicalHistoryService.findById(id), HttpStatus.OK);
     }

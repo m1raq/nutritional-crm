@@ -49,22 +49,22 @@ public class ClientController {
                 .build(), HttpStatus.OK);
     }
 
-    @GetMapping("/get-clients-by-current-user")
+    @GetMapping("/get-by-current-user")
     public ResponseEntity<List<ClientEntity>> getClientsByCurrentUser() {
         return new ResponseEntity<>(clientService.findAllByCurrentUser(), HttpStatus.FOUND);
     }
 
-    @GetMapping("/get-clients-by-name")
+    @GetMapping("/get-by-name")
     public ResponseEntity<List<ClientEntity>> getClientsByName(@RequestParam String name) {
         return new ResponseEntity<>(clientService.findByName(name), HttpStatus.FOUND);
     }
 
-    @GetMapping("/get-client-by-contacts")
+    @GetMapping("/get-by-contacts")
     public ResponseEntity<ClientEntity> getClientsByContacts(@RequestParam String contacts) {
         return new ResponseEntity<>(clientService.findByContacts(contacts), HttpStatus.FOUND);
     }
 
-    @GetMapping("/get-client-by-age")
+    @GetMapping("/get-by-age")
     public ResponseEntity<List<ClientEntity>> getClientByAge(@RequestParam Integer age) {
         return new ResponseEntity<>(clientService.findByAge(age), HttpStatus.FOUND);
     }
