@@ -24,6 +24,9 @@ public class BiomarkerEntity {
     @Column(name = "value", nullable = false)
     private String value;
 
+    @Column(name = "normalValue", nullable = false)
+    private String normalValue;
+
     @Column(name = "clinical_references", nullable = false)
     private String clinicalReferences;
 
