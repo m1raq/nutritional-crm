@@ -32,7 +32,7 @@ public class GoogleFormsServiceImpl implements GoogleFormsService {
     }
 
     @Override
-    public void createQuestion(String formId, String questionText) {
+    public String createQuestion(String formId, String questionText) {
         Question question = new Question()
                 .setRequired(true)
                 .setTextQuestion(new TextQuestion()
@@ -47,13 +47,19 @@ public class GoogleFormsServiceImpl implements GoogleFormsService {
                 .setRequests(List.of(request));
         try {
             formsService.forms().batchUpdate(formId, batchUpdateFormRequest).execute();
+            return formsService.forms().get(formId).execute().getResponderUri();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void createQuestion(String formId, List<String> questionTexts) {
+    public String createQuestion(String formId, List<String> questionTexts) {
         questionTexts.forEach(question -> createQuestion(formId, question));
+        try {
+            return formsService.forms().get(formId).execute().getResponderUri();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -4,7 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.app.nutritionologycrm.dto.ClientCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.client.ClientCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.client.ClientUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.ClientEntity;
 import ru.app.nutritionologycrm.exception.ClientProcessingException;
 import ru.app.nutritionologycrm.repository.ClientRepository;
@@ -50,12 +51,21 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void updateClient(ClientEntity clientEntity) {
-        log.info("Attempt to update client {}", clientEntity.getId());
-        if (!clientRepository.existsById(clientEntity.getId())) {
-            throw new ClientProcessingException("Client with id " + clientEntity.getId() + " doesn't exist");
+    public void updateClient(ClientUpdateRequestDTO update) {
+        log.info("Attempt to update client {}", update.getId());
+        if (!clientRepository.existsById(update.getId())) {
+            throw new ClientProcessingException("Client with id " + update.getId() + " doesn't exist");
         }
-        clientRepository.save(clientEntity);
+
+        ClientEntity clientToUpdate = findById(update.getId());
+        clientToUpdate.setName(update.getName());
+        clientToUpdate.setAge(update.getAge());
+        clientToUpdate.setSex(update.getSex());
+        clientToUpdate.setStatus(update.getStatus());
+        clientToUpdate.setContacts(update.getContacts());
+        clientToUpdate.setTgUrl(update.getTgUrl());
+
+        clientRepository.save(clientToUpdate);
     }
 
     @Override
@@ -89,5 +99,11 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<ClientEntity> findByName(String name) {
         return clientRepository.findByName(name);
+    }
+
+    @Override
+    public ClientEntity findById(Long id) {
+        return clientRepository.findById(id)
+                .orElseThrow(()-> new ClientProcessingException("Client with id " + id + " doesn't exist"));
     }
 }

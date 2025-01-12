@@ -6,8 +6,8 @@ public interface GoogleFormsService {
 
     String createForm(String token, String formTitle);
 
-    void createQuestion(String formId, String questionText);
+    String createQuestion(String formId, String questionText);
 
-    void createQuestion(String formId, List<String> questionTexts);
+    String createQuestion(String formId, List<String> questionTexts);
 
 }
