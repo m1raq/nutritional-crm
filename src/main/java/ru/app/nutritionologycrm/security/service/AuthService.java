@@ -35,11 +35,9 @@ public class AuthService {
     public JwtAuthResponseDTO signUp(RegisterRequestDTO request) {
 
         UserEntity user = new UserEntity();
-        user.setEmail(request.getEmail());
+        user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(RoleType.ROLE_USER);
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
 
         userService.saveUser(user);
 
