@@ -7,7 +7,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Builder
-public class ResponseMessage {
+public class ResponseMessageDTO {
 
     private Boolean success;
 
