@@ -45,7 +45,7 @@ public class UserEntity implements UserDetails {
     private List<MeetEntity> meets;
 
     @Column(name = "documents_id")
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "user")
     private List<DocumentEntity> documents;
 
     @Enumerated(EnumType.STRING)
