@@ -10,11 +10,13 @@ import ru.app.nutritionologycrm.dto.ResponseMessage;
 public class RestAPIExceptionHandler {
 
 
-    @ExceptionHandler(value = EntityProcessingException.class)
-    public ResponseEntity<ResponseMessage> handleEntityProcessingException(EntityProcessingException e) {
+    @ExceptionHandler(value = {EntityProcessingException.class, DocumentProcessingException.class})
+    public ResponseEntity<ResponseMessage> handleEntityProcessingException(RuntimeException e) {
         return new ResponseEntity<>(ResponseMessage.builder()
                 .success(false)
                 .message(e.getMessage())
                 .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }
