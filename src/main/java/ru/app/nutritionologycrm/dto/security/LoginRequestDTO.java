@@ -1,4 +1,4 @@
-package ru.app.nutritionologycrm.dto;
+package ru.app.nutritionologycrm.dto.security;
 
 import lombok.Builder;
 import lombok.Data;
