@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.app.nutritionologycrm.dto.client.ClientCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.client.ClientUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.ClientEntity;
-import ru.app.nutritionologycrm.exception.ClientProcessingException;
+import ru.app.nutritionologycrm.exception.EntityProcessingException;
 import ru.app.nutritionologycrm.repository.ClientRepository;
 import ru.app.nutritionologycrm.service.ClientService;
 import ru.app.nutritionologycrm.service.UserService;
@@ -32,7 +32,7 @@ public class ClientServiceImpl implements ClientService {
     public void saveClient(ClientCreateRequestDTO request) {
         log.info("Attempt to save client");
         if (clientRepository.existsByContacts(request.getContacts())) {
-            throw new ClientProcessingException("Client with contacts "
+            throw new EntityProcessingException("Client with contacts "
                     + request.getContacts() + "already exists");
         }
 
@@ -54,7 +54,7 @@ public class ClientServiceImpl implements ClientService {
     public void updateClient(ClientUpdateRequestDTO update) {
         log.info("Attempt to update client {}", update.getId());
         if (!clientRepository.existsById(update.getId())) {
-            throw new ClientProcessingException("Client with id " + update.getId() + " doesn't exist");
+            throw new EntityProcessingException("Client with id " + update.getId() + " doesn't exist");
         }
 
         ClientEntity clientToUpdate = findById(update.getId());
@@ -72,13 +72,16 @@ public class ClientServiceImpl implements ClientService {
     public void updateClientStatus(Long id, String status) {
         log.info("Attempt to update client {} status", id);
         if (!clientRepository.existsById(id)) {
-            throw new ClientProcessingException("Client with id " + id + " doesn't exist");
+            throw new EntityProcessingException("Client with id " + id + " doesn't exist");
         }
         clientRepository.updateStatusById(id, status);
     }
 
     @Override
     public List<ClientEntity> findAllByCurrentUser() {
+        log.info("Attempt to find all clients by user {}", SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName());
         return clientRepository.findAllByUserUsername(SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName());
@@ -98,12 +101,14 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientEntity> findByName(String name) {
+        log.info("Attempt to find client by name {}", name);
         return clientRepository.findByName(name);
     }
 
     @Override
     public ClientEntity findById(Long id) {
+        log.info("Attempt to find client by id {}", id);
         return clientRepository.findById(id)
-                .orElseThrow(()-> new ClientProcessingException("Client with id " + id + " doesn't exist"));
+                .orElseThrow(()-> new EntityProcessingException("Client with id " + id + " doesn't exist"));
     }
 }

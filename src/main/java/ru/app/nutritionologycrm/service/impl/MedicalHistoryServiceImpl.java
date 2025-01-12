@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.MedicalHistoryEntity;
-import ru.app.nutritionologycrm.exception.MedicalHistoryProcessingException;
+import ru.app.nutritionologycrm.exception.EntityProcessingException;
 import ru.app.nutritionologycrm.repository.MedicalHistoryRepository;
 import ru.app.nutritionologycrm.service.ClientService;
 import ru.app.nutritionologycrm.service.GoogleFormsService;
@@ -58,7 +58,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     public void updateMedicalHistory(MedicalHistoryUpdateRequestDTO updates) {
         MedicalHistoryEntity medicalHistoryToUpdate
                 = medicalHistoryRepository.findById(updates.getId())
-                .orElseThrow(() -> new MedicalHistoryProcessingException("Medical history with id "
+                .orElseThrow(() -> new EntityProcessingException("Medical history with id "
                         + updates.getId() + " not found"));
         medicalHistoryToUpdate.setAnthropometry(updates.getAnthropometry());
         medicalHistoryToUpdate.setGoals(updates.getGoals());
@@ -98,7 +98,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     @Override
     public MedicalHistoryEntity findById(Long id) {
         return medicalHistoryRepository.findById(id)
-                .orElseThrow(() -> new MedicalHistoryProcessingException("Medical history with id "
+                .orElseThrow(() -> new EntityProcessingException("Medical history with id "
                         + id + " not found"));
     }
 }
