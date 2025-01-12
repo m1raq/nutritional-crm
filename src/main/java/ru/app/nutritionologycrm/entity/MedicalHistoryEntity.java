@@ -42,7 +42,6 @@ public class MedicalHistoryEntity {
     @Column(name = "special_conditions", nullable = false)
     private String specialConditions;
 
-    @JoinColumn(name = "client_id")
     @OneToOne(mappedBy = "medicalHistory")
     private ClientEntity client;
 }

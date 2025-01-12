@@ -37,22 +37,22 @@ public class ClientEntity {
 
     @JoinColumn(name = "user_id")
     @ManyToOne
-    private UserEntity userEntity;
+    private UserEntity user;
 
     @JoinColumn(name = "medical_history_id")
-    @OneToOne(mappedBy = "client_id")
+    @OneToOne()
     private MedicalHistoryEntity medicalHistory;
 
     @Column(name = "meet_id")
-    @OneToMany(mappedBy = "client_id")
+    @OneToMany(mappedBy = "client")
     private List<MeetEntity> meets;
 
     @Column(name = "biomarkers_id")
-    @OneToMany(mappedBy = "client_id")
+    @OneToMany(mappedBy = "client")
     private List<BiomarkerEntity> biomarkers;
 
     @Column(name = "recommendation_id")
-    @OneToMany(mappedBy = "client_id")
+    @OneToMany(mappedBy = "client")
     private List<RecommendationEntity> recommendations;
 
 
