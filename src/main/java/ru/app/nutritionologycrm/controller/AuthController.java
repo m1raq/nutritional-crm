@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.app.nutritionologycrm.dto.JwtAuthResponseDTO;
-import ru.app.nutritionologycrm.dto.LoginRequestDTO;
-import ru.app.nutritionologycrm.dto.RegisterRequestDTO;
+import ru.app.nutritionologycrm.dto.security.JwtAuthResponseDTO;
+import ru.app.nutritionologycrm.dto.security.LoginRequestDTO;
+import ru.app.nutritionologycrm.dto.security.RegisterRequestDTO;
 import ru.app.nutritionologycrm.security.service.AuthService;
 
 

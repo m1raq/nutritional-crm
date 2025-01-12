@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.app.nutritionologycrm.dto.ClientCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.client.ClientCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.ResponseMessage;
+import ru.app.nutritionologycrm.dto.client.ClientUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.ClientEntity;
 import ru.app.nutritionologycrm.service.ClientService;
 
@@ -32,7 +33,7 @@ public class ClientController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseMessage> updateClient(@RequestBody ClientEntity client) {
+    public ResponseEntity<ResponseMessage> updateClient(@RequestBody ClientUpdateRequestDTO client) {
         clientService.updateClient(client);
         return new ResponseEntity<>(ResponseMessage.builder()
                 .message("Client is updated")
