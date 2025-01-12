@@ -1,4 +1,4 @@
-package ru.app.nutritionologycrm.dto;
+package ru.app.nutritionologycrm.dto.client;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,9 +9,11 @@ import lombok.Setter;
 @Builder
 public class ClientUpdateRequestDTO {
 
+    private Long id;
+
     private String name;
 
-    private String age;
+    private Integer age;
 
     private String sex;
 
