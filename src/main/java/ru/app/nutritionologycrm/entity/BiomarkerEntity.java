@@ -36,7 +36,6 @@ public class BiomarkerEntity {
     @Column(name = "unit", nullable = false)
     private String unit;
 
-    @CreationTimestamp
     @Column(name = "date", nullable = false)
     private LocalDateTime date;
 
