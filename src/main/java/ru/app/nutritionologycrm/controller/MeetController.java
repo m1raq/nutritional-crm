@@ -1,17 +1,23 @@
 package ru.app.nutritionologycrm.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.app.nutritionologycrm.dto.ResponseMessageDTO;
 import ru.app.nutritionologycrm.dto.meet.MeetCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.meet.MeetDTO;
 import ru.app.nutritionologycrm.dto.meet.MeetUpdateRequestDTO;
-import ru.app.nutritionologycrm.entity.MeetEntity;
 import ru.app.nutritionologycrm.service.MeetService;
 
 import java.util.List;
 
+@Tag(name = "Встречи")
+@SecurityRequirement(name = "JWT")
 @RequestMapping("/api/v1/meet")
 @RestController
 public class MeetController {
@@ -23,6 +29,9 @@ public class MeetController {
         this.meetService = meetService;
     }
 
+    @Operation(summary = "Создание встречи"
+            , parameters = {@Parameter(name = "clientId", description = "Id клиента с которым будет " +
+            "организована встреча")})
     @PostMapping("/create")
     public ResponseEntity<ResponseMessageDTO> createMeet(@RequestParam Long clientId
             , @RequestBody MeetCreateRequestDTO request) {
@@ -33,6 +42,7 @@ public class MeetController {
                 .build(), HttpStatus.OK);
     }
 
+    @Operation(summary = "Создание встречи")
     @PutMapping("/update")
     public ResponseEntity<ResponseMessageDTO> updateMeet(@RequestBody MeetUpdateRequestDTO request) {
         meetService.update(request);
@@ -42,11 +52,15 @@ public class MeetController {
                 .build(), HttpStatus.OK);
     }
 
+    @Operation(summary = "Поиск встречи по id клиента"
+            , parameters = {@Parameter(name = "clientId", description = "Id клиента")})
     @GetMapping("/get-by-client-id")
-    public ResponseEntity<List<MeetEntity>> getMeetByClientId(@RequestParam Long clientId) {
+    public ResponseEntity<List<MeetDTO>> getMeetByClientId(@RequestParam Long clientId) {
         return new ResponseEntity<>(meetService.findAllByClientId(clientId), HttpStatus.OK);
     }
 
+    @Operation(summary = "Удаление встречи по id"
+            , parameters = {@Parameter(name = "meetId", description = "Id встречи")})
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseMessageDTO> deleteMeet(@RequestParam Long meetId) {
         meetService.delete(meetId);
