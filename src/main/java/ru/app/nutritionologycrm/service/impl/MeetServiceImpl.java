@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.app.nutritionologycrm.dto.meet.MeetCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.meet.MeetDTO;
 import ru.app.nutritionologycrm.dto.meet.MeetUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.MeetEntity;
 import ru.app.nutritionologycrm.exception.EntityProcessingException;
+import ru.app.nutritionologycrm.mapper.ClientMapper;
+import ru.app.nutritionologycrm.mapper.MeetMapper;
 import ru.app.nutritionologycrm.repository.MeetRepository;
 import ru.app.nutritionologycrm.service.ClientService;
 import ru.app.nutritionologycrm.service.MeetService;
@@ -21,14 +24,22 @@ public class MeetServiceImpl implements MeetService {
 
     private final MeetRepository meetRepository;
 
+    private final MeetMapper meetMapper;
+
     private final ClientService clientService;
+
+    private final ClientMapper clientMapper;
 
     private final UserService userService;
 
+
     @Autowired
-    public MeetServiceImpl(MeetRepository meetRepository, ClientService clientService, UserService userService) {
+    public MeetServiceImpl(MeetRepository meetRepository, MeetMapper meetMapper, ClientService clientService
+            , ClientMapper clientMapper, UserService userService) {
         this.meetRepository = meetRepository;
+        this.meetMapper = meetMapper;
         this.clientService = clientService;
+        this.clientMapper = clientMapper;
         this.userService = userService;
     }
 
@@ -45,8 +56,10 @@ public class MeetServiceImpl implements MeetService {
         meet.setDate(request.getDate());
         meet.setDuration(request.getDuration());
         meet.setPlace(request.getPlace());
-        meet.setClient(clientService.findById(clientId));
-        meet.setUser(userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
+        meet.setClient(clientMapper.toEntity(clientService.findById(clientId)));
+        meet.setUser(userService.findByUsername(SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName()));
 
         meetRepository.save(meet);
     }
@@ -71,9 +84,12 @@ public class MeetServiceImpl implements MeetService {
     }
 
     @Override
-    public List<MeetEntity> findAllByClientId(Long id) {
+    public List<MeetDTO> findAllByClientId(Long id) {
         log.info("Attempt to find all meet for client {}", id);
-        return meetRepository.findAllByClientId(id);
+        return meetRepository.findAllByClientId(id)
+                .stream()
+                .map(meetMapper::toDTO)
+                .toList();
     }
 
     @Override

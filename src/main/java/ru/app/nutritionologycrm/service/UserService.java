@@ -1,15 +1,16 @@
 package ru.app.nutritionologycrm.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import ru.app.nutritionologycrm.dto.UserDTO;
 import ru.app.nutritionologycrm.entity.UserEntity;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserEntity findUserById(Long id);
+    UserDTO findUserById(Long id);
 
-    List<UserEntity> findAllUsers();
+    List<UserDTO> findAllUsers();
 
     void saveUser(UserEntity user);
 
@@ -19,6 +20,6 @@ public interface UserService {
 
     UserDetailsService userDetailsService();
 
-    UserEntity getCurrentUser();
+    UserDTO getCurrentUser();
 
 }

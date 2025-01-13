@@ -2,7 +2,8 @@ package ru.app.nutritionologycrm.service;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
-import ru.app.nutritionologycrm.entity.DocumentEntity;
+import ru.app.nutritionologycrm.dto.DocumentDTO;
+
 
 import java.util.Date;
 import java.util.List;
@@ -13,11 +14,11 @@ public interface DocumentService {
 
     Resource loadFile(String fileName);
 
-    List<DocumentEntity> getAllFiles();
+    List<DocumentDTO> getAllFiles();
 
-    DocumentEntity findByNameAndCurrentUser(String name);
+    DocumentDTO findByNameAndCurrentUser(String name);
 
-    List<DocumentEntity> findByDateAndCurrentUser(Date date);
+    List<DocumentDTO> findByDateAndCurrentUser(Date date);
 
 
 }

@@ -8,8 +8,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import ru.app.nutritionologycrm.dto.DocumentDTO;
 import ru.app.nutritionologycrm.entity.DocumentEntity;
 import ru.app.nutritionologycrm.exception.DocumentProcessingException;
+import ru.app.nutritionologycrm.mapper.ClientMapper;
+import ru.app.nutritionologycrm.mapper.DocumentMapper;
 import ru.app.nutritionologycrm.repository.DocumentRepository;
 import ru.app.nutritionologycrm.service.ClientService;
 import ru.app.nutritionologycrm.service.DocumentService;
@@ -32,15 +35,23 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
 
+    private final DocumentMapper documentMapper;
+
     private final ClientService clientService;
 
     private final UserService userService;
 
+
+    private final ClientMapper clientMapper;
+
     @Autowired
-    public DocumentServiceImpl(DocumentRepository documentRepository, ClientService clientService, UserService userService) {
+    public DocumentServiceImpl(DocumentRepository documentRepository, DocumentMapper documentMapper
+            , ClientService clientService, UserService userService, ClientMapper clientMapper) {
         this.documentRepository = documentRepository;
+        this.documentMapper = documentMapper;
         this.clientService = clientService;
         this.userService = userService;
+        this.clientMapper = clientMapper;
         this.fileStorageLocation = Paths.get("uploads").toAbsolutePath().normalize();
 
         try {
@@ -60,7 +71,7 @@ public class DocumentServiceImpl implements DocumentService {
 
             DocumentEntity documentEntity = new DocumentEntity();
             documentEntity.setName(fileName);
-            documentEntity.setClient(clientService.findById(clientId));
+            documentEntity.setClient(clientMapper.toEntity(clientService.findById(clientId)));
             documentEntity.setUser(userService.findByUsername(SecurityContextHolder.getContext()
                     .getAuthentication()
                     .getName()));
@@ -95,25 +106,32 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<DocumentEntity> getAllFiles() {
+    public List<DocumentDTO> getAllFiles() {
         log.info("Attempt to get all files");
         return documentRepository.findAllByUserUsername(SecurityContextHolder.getContext()
                 .getAuthentication()
-                .getName());
+                .getName())
+                .stream()
+                .map(documentMapper::toDTO)
+                .toList();
     }
 
     @Override
-    public DocumentEntity findByNameAndCurrentUser(String name) {
-        return documentRepository.findByNameAndUserUsername(name, SecurityContextHolder.getContext()
+    public DocumentDTO findByNameAndCurrentUser(String name) {
+        return documentMapper.toDTO(documentRepository
+                .findByNameAndUserUsername(name, SecurityContextHolder.getContext()
                 .getAuthentication()
-                .getName());
+                .getName()));
     }
 
     @Override
-    public List<DocumentEntity> findByDateAndCurrentUser(Date date) {
+    public List<DocumentDTO> findByDateAndCurrentUser(Date date) {
         return documentRepository.findByDateAndUserUsername(date, SecurityContextHolder.getContext()
                 .getAuthentication()
-                .getName());
+                .getName())
+                .stream()
+                .map(documentMapper::toDTO)
+                .toList();
     }
 
 }

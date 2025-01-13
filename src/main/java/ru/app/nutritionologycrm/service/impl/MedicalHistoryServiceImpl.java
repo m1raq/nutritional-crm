@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.MedicalHistoryEntity;
 import ru.app.nutritionologycrm.exception.EntityProcessingException;
+import ru.app.nutritionologycrm.mapper.ClientMapper;
+import ru.app.nutritionologycrm.mapper.MedicalHistoryMapper;
 import ru.app.nutritionologycrm.repository.MedicalHistoryRepository;
 import ru.app.nutritionologycrm.service.ClientService;
 import ru.app.nutritionologycrm.service.GoogleFormsService;
@@ -24,13 +27,20 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
 
     private final MedicalHistoryRepository medicalHistoryRepository;
 
+    private final MedicalHistoryMapper medicalHistoryMapper;
+
+    private final ClientMapper clientMapper;
+
     private final ClientService clientService;
 
     @Autowired
     public MedicalHistoryServiceImpl(GoogleFormsService googleFormsService
-            , MedicalHistoryRepository medicalHistoryRepository, ClientService clientService) {
+            , MedicalHistoryRepository medicalHistoryRepository, MedicalHistoryMapper medicalHistoryMapper
+            , ClientMapper clientMapper, ClientService clientService) {
         this.googleFormsService = googleFormsService;
         this.medicalHistoryRepository = medicalHistoryRepository;
+        this.medicalHistoryMapper = medicalHistoryMapper;
+        this.clientMapper = clientMapper;
         this.clientService = clientService;
     }
 
@@ -39,7 +49,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         log.info("Attempting to save medical history");
 
         MedicalHistoryEntity medicalHistoryEntity = new MedicalHistoryEntity();
-        medicalHistoryEntity.setClient(clientService.findById(clientId));
+        medicalHistoryEntity.setClient(clientMapper.toEntity(clientService.findById(clientId)));
         medicalHistoryEntity.setAnthropometry(request.getAnthropometry());
         medicalHistoryEntity.setGoals(request.getGoals());
         medicalHistoryEntity.setHypotheses(request.getGoals());
@@ -83,22 +93,28 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     }
 
     @Override
-    public List<MedicalHistoryEntity> findAllMedicalHistoriesByCurrentUser() {
+    public List<MedicalHistoryDTO> findAllMedicalHistoriesByCurrentUser() {
         log.info("Attempting to find all medical histories");
         return medicalHistoryRepository.findAllByClientUserUsername(SecurityContextHolder.getContext()
                         .getAuthentication()
-                        .getName());
+                        .getName())
+                .stream()
+                .map(medicalHistoryMapper::toDTO)
+                .toList();
     }
 
     @Override
-    public List<MedicalHistoryEntity> findAllByClientId(Long clientId) {
-        return medicalHistoryRepository.findAllByClientId(clientId);
+    public List<MedicalHistoryDTO> findAllByClientId(Long clientId) {
+        return medicalHistoryRepository.findAllByClientId(clientId)
+                .stream()
+                .map(medicalHistoryMapper::toDTO)
+                .toList();
     }
 
     @Override
-    public MedicalHistoryEntity findById(Long id) {
-        return medicalHistoryRepository.findById(id)
+    public MedicalHistoryDTO findById(Long id) {
+        return medicalHistoryMapper.toDTO(medicalHistoryRepository.findById(id)
                 .orElseThrow(() -> new EntityProcessingException("Medical history with id "
-                        + id + " not found"));
+                        + id + " not found")));
     }
 }

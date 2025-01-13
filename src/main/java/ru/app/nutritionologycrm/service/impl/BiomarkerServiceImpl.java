@@ -5,13 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.app.nutritionologycrm.dto.biomarker.BiomarkerCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.biomarker.BiomarkerDTO;
 import ru.app.nutritionologycrm.dto.biomarker.BiomarkerUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.BiomarkerEntity;
 import ru.app.nutritionologycrm.exception.EntityProcessingException;
+import ru.app.nutritionologycrm.mapper.BiomarkerMapper;
+import ru.app.nutritionologycrm.mapper.ClientMapper;
 import ru.app.nutritionologycrm.repository.BiomarkerRepository;
 import ru.app.nutritionologycrm.service.BiomarkerService;
+import ru.app.nutritionologycrm.service.ClientService;
+import ru.app.nutritionologycrm.service.UserService;
 
 import java.util.List;
+
 
 @Slf4j
 @Service
@@ -19,13 +25,26 @@ public class BiomarkerServiceImpl implements BiomarkerService {
 
     private final BiomarkerRepository biomarkerRepository;
 
+    private final BiomarkerMapper biomarkerMapper;
+
+    private final ClientService clientService;
+
+    private final ClientMapper clientMapper;
+
+    private final UserService userService;
+
     @Autowired
-    public BiomarkerServiceImpl(BiomarkerRepository biomarkerRepository) {
+    public BiomarkerServiceImpl(BiomarkerRepository biomarkerRepository, BiomarkerMapper biomarkerMapper
+            , ClientService clientService, ClientMapper clientMapper, UserService userService) {
         this.biomarkerRepository = biomarkerRepository;
+        this.biomarkerMapper = biomarkerMapper;
+        this.clientService = clientService;
+        this.clientMapper = clientMapper;
+        this.userService = userService;
     }
 
     @Override
-    public void saveBiomarker(BiomarkerCreateRequestDTO request) {
+    public void saveBiomarker(BiomarkerCreateRequestDTO request, Long clientId) {
         log.info("Attempt to save biomarker");
         BiomarkerEntity biomarker = new BiomarkerEntity();
 
@@ -33,8 +52,13 @@ public class BiomarkerServiceImpl implements BiomarkerService {
         biomarker.setValue(request.getValue());
         biomarker.setNormalValue(request.getNormalValue());
         biomarker.setClinicalReferences(request.getClinicalReferences());
-        biomarker.setNutritionist(request.getNutritionist());
+        biomarker.setNutritionist(request.getNutritionistReferences());
         biomarker.setUnit(request.getUnit());
+        biomarker.setDate(request.getDate());
+        biomarker.setClient(clientMapper.toEntity(clientService.findById(clientId)));
+        biomarker.setUser(userService.findByUsername(SecurityContextHolder.getContext().
+                getAuthentication()
+                .getName()));
 
         biomarkerRepository.save(biomarker);
     }
@@ -56,15 +80,20 @@ public class BiomarkerServiceImpl implements BiomarkerService {
 
     //TODO: Доработать сортировку по дате
     @Override
-    public List<BiomarkerEntity> findAllBiomarkersByCurrentUser() {
+    public List<BiomarkerDTO> findAllBiomarkersByCurrentUser() {
         return biomarkerRepository.findAllByUserUsername(SecurityContextHolder.getContext()
                 .getAuthentication()
-                .getName());
+                .getName())
+                .stream()
+                .map(biomarkerMapper::toDTO)
+                .toList();
     }
 
     @Override
-    public List<BiomarkerEntity> findAllBiomarkersByClientId(Long clientId) {
-        return biomarkerRepository.findAllByClientId(clientId);
+    public List<BiomarkerDTO> findAllBiomarkersByClientId(Long clientId) {
+        return biomarkerRepository.findAllByClientId(clientId).stream()
+                .map(biomarkerMapper::toDTO)
+                .toList();
     }
 
 }

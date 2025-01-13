@@ -3,11 +3,12 @@ package ru.app.nutritionologycrm.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.app.nutritionologycrm.dto.UserDTO;
 import ru.app.nutritionologycrm.entity.UserEntity;
+import ru.app.nutritionologycrm.mapper.UserMapper;
 import ru.app.nutritionologycrm.repository.UserRepository;
 import ru.app.nutritionologycrm.service.UserService;
 
@@ -19,22 +20,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
+    private final UserMapper userMapper;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
-    public UserEntity findUserById(Long id) {
+    public UserDTO findUserById(Long id) {
         log.info("Attempt to load user by id: {}", id);
-        return userRepository.findById(id)
-                .orElseThrow(()-> new UsernameNotFoundException(id.toString()));
+        return userMapper.toDTO(userRepository.findById(id)
+                .orElseThrow(()-> new UsernameNotFoundException(id.toString())));
     }
 
     @Override
-    public List<UserEntity> findAllUsers() {
+    public List<UserDTO> findAllUsers() {
         log.info("Attempt to load all users");
-        return userRepository.findAll();
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toDTO)
+                .toList();
     }
 
     @Override
@@ -61,8 +68,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserEntity getCurrentUser() {
-        return findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+    public UserDTO getCurrentUser() {
+        return userMapper.toDTO(findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
 

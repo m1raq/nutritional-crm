@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.app.nutritionologycrm.dto.recommendation.RecommendationCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.recommendation.RecommendationDTO;
 import ru.app.nutritionologycrm.dto.recommendation.RecommendationUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.RecommendationEntity;
 import ru.app.nutritionologycrm.exception.EntityProcessingException;
+import ru.app.nutritionologycrm.mapper.ClientMapper;
+import ru.app.nutritionologycrm.mapper.RecommendationMapper;
 import ru.app.nutritionologycrm.repository.RecommendationRepository;
 import ru.app.nutritionologycrm.service.ClientService;
 import ru.app.nutritionologycrm.service.RecommendationService;
@@ -21,15 +24,23 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     private final RecommendationRepository recommendationRepository;
 
+    private final RecommendationMapper recommendationMapper;
+
     private final ClientService clientService;
 
     private final UserService userService;
 
+    private final ClientMapper clientMapper;
+
     @Autowired
-    public RecommendationServiceImpl(RecommendationRepository recommendationRepository, ClientService clientService, UserService userService) {
+    public RecommendationServiceImpl(RecommendationRepository recommendationRepository
+            , RecommendationMapper recommendationMapper, ClientService clientService
+            , UserService userService, ClientMapper clientMapper) {
         this.recommendationRepository = recommendationRepository;
+        this.recommendationMapper = recommendationMapper;
         this.clientService = clientService;
         this.userService = userService;
+        this.clientMapper = clientMapper;
     }
 
     @Override
@@ -43,7 +54,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         recommendation.setPhysicalActivity(request.getPhysicalActivity());
         recommendation.setLifeMode(request.getLifeMode());
         recommendation.setStressControl(request.getStressControl());
-        recommendation.setClient(clientService.findById(clientId));
+        recommendation.setClient(clientMapper.toEntity(clientService.findById(clientId)));
         recommendation.setUser(userService.findByUsername(SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName()));
@@ -70,8 +81,11 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     @Override
-    public List<RecommendationEntity> findRecommendationByClientId(Long clientId) {
+    public List<RecommendationDTO> findRecommendationByClientId(Long clientId) {
         log.info("Attempt to find recommendation by client id {}", clientId);
-        return recommendationRepository.findAllByClientId(clientId);
+        return recommendationRepository.findAllByClientId(clientId)
+                .stream()
+                .map(recommendationMapper::toDTO)
+                .toList();
     }
 }

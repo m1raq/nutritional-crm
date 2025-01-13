@@ -1,8 +1,8 @@
 package ru.app.nutritionologycrm.service;
 
 import ru.app.nutritionologycrm.dto.recommendation.RecommendationCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.recommendation.RecommendationDTO;
 import ru.app.nutritionologycrm.dto.recommendation.RecommendationUpdateRequestDTO;
-import ru.app.nutritionologycrm.entity.RecommendationEntity;
 
 import java.util.List;
 
@@ -12,6 +12,6 @@ public interface RecommendationService {
 
     void update(RecommendationUpdateRequestDTO updates);
 
-    List<RecommendationEntity> findRecommendationByClientId(Long clientId);
+    List<RecommendationDTO> findRecommendationByClientId(Long clientId);
 
 }

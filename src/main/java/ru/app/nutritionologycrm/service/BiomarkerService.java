@@ -1,19 +1,20 @@
 package ru.app.nutritionologycrm.service;
 
 import ru.app.nutritionologycrm.dto.biomarker.BiomarkerCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.biomarker.BiomarkerDTO;
 import ru.app.nutritionologycrm.dto.biomarker.BiomarkerUpdateRequestDTO;
-import ru.app.nutritionologycrm.entity.BiomarkerEntity;
+
 
 import java.util.List;
 
 public interface BiomarkerService {
 
-    void saveBiomarker(BiomarkerCreateRequestDTO request);
+    void saveBiomarker(BiomarkerCreateRequestDTO request, Long clientId);
 
     void updateBiomarker(BiomarkerUpdateRequestDTO updates);
 
-    List<BiomarkerEntity> findAllBiomarkersByCurrentUser();
+    List<BiomarkerDTO> findAllBiomarkersByCurrentUser();
 
-    List<BiomarkerEntity> findAllBiomarkersByClientId(Long clientId);
+    List<BiomarkerDTO> findAllBiomarkersByClientId(Long clientId);
 
 }

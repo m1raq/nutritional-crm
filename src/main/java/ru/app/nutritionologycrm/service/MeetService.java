@@ -1,8 +1,9 @@
 package ru.app.nutritionologycrm.service;
 
 import ru.app.nutritionologycrm.dto.meet.MeetCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.meet.MeetDTO;
 import ru.app.nutritionologycrm.dto.meet.MeetUpdateRequestDTO;
-import ru.app.nutritionologycrm.entity.MeetEntity;
+
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface MeetService {
 
     void update(MeetUpdateRequestDTO updates);
 
-    List<MeetEntity> findAllByClientId(Long id);
+    List<MeetDTO> findAllByClientId(Long id);
 
     void delete(Long id);
 

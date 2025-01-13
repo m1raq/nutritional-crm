@@ -1,8 +1,9 @@
 package ru.app.nutritionologycrm.service;
 
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryCreateRequestDTO;
+import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryUpdateRequestDTO;
-import ru.app.nutritionologycrm.entity.MedicalHistoryEntity;
+
 
 import java.util.List;
 
@@ -14,10 +15,10 @@ public interface MedicalHistoryService {
 
     String createMedicalHistoryQuestionnaire();
 
-    List<MedicalHistoryEntity> findAllMedicalHistoriesByCurrentUser();
+    List<MedicalHistoryDTO> findAllMedicalHistoriesByCurrentUser();
 
-    List<MedicalHistoryEntity> findAllByClientId(Long clientId);
+    List<MedicalHistoryDTO> findAllByClientId(Long clientId);
 
-    MedicalHistoryEntity findById(Long id);
+    MedicalHistoryDTO findById(Long id);
 
 }
