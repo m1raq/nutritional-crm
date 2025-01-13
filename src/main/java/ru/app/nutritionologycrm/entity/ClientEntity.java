@@ -29,8 +29,9 @@ public class ClientEntity {
     @Column(name = "sex")
     private String sex;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private ClientStatus status;
 
     @Column(name = "tg_url")
     private String tgUrl;
