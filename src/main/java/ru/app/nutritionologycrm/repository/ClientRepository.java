@@ -24,6 +24,5 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     List<ClientEntity> findAllByUserUsername(String username);
 
-    List<ClientEntity> findByName(String name);
-
+    List<ClientEntity> findAllByNameAndUserUsername(String name, String username);
 }
