@@ -8,7 +8,6 @@ import ru.app.nutritionologycrm.dto.client.ClientCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.client.ClientDTO;
 import ru.app.nutritionologycrm.dto.client.ClientUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.ClientEntity;
-import ru.app.nutritionologycrm.entity.ClientStatus;
 import ru.app.nutritionologycrm.exception.EntityProcessingException;
 import ru.app.nutritionologycrm.mapper.ClientMapper;
 import ru.app.nutritionologycrm.repository.ClientRepository;
@@ -46,7 +45,7 @@ public class ClientServiceImpl implements ClientService {
         ClientEntity clientEntity = new ClientEntity();
         clientEntity.setName(request.getName());
         clientEntity.setContacts(request.getContacts());
-        clientEntity.setStatus(request.getStatus().equals("Активный") ? ClientStatus.ENABLED : ClientStatus.DISABLED);
+        clientEntity.setStatus(request.getStatus());
         clientEntity.setSex(request.getSex());
         clientEntity.setTgUrl(request.getTgUrl());
         clientEntity.setAge(request.getAge());
@@ -69,15 +68,24 @@ public class ClientServiceImpl implements ClientService {
         clientToUpdate.setName(update.getName());
         clientToUpdate.setAge(update.getAge());
         clientToUpdate.setSex(update.getSex());
-        clientToUpdate.setStatus(update.getStatus().equals("Активный") ? ClientStatus.ENABLED : ClientStatus.DISABLED);
+        clientToUpdate.setStatus(update.getStatus());
         clientToUpdate.setContacts(update.getContacts());
         clientToUpdate.setTgUrl(update.getTgUrl());
+        clientToUpdate.setUser(userService.findByUsername(SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName()));
 
         clientRepository.save(clientToUpdate);
     }
 
     @Override
-    public void updateClientStatus(Long id, String status) {
+    public void updateClient(ClientEntity update) {
+        log.info("Attempt to update client {}", update.getId());
+        clientRepository.save(update);
+    }
+
+    @Override
+    public void updateClientStatus(Long id, Boolean status) {
         log.info("Attempt to update client {} status", id);
         if (!clientRepository.existsById(id)) {
             throw new EntityProcessingException("Client with id " + id + " doesn't exist");

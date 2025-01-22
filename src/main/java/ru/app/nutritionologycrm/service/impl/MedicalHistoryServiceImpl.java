@@ -3,11 +3,11 @@ package ru.app.nutritionologycrm.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryUpdateRequestDTO;
+import ru.app.nutritionologycrm.entity.ClientEntity;
 import ru.app.nutritionologycrm.entity.MedicalHistoryEntity;
 import ru.app.nutritionologycrm.exception.EntityProcessingException;
 import ru.app.nutritionologycrm.mapper.ClientMapper;
@@ -48,8 +48,14 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     public void saveMedicalHistory(MedicalHistoryCreateRequestDTO request, Long clientId) {
         log.info("Attempting to save medical history");
 
+        if (medicalHistoryRepository.existsByClientId(clientId)) {
+            throw new EntityProcessingException("Client with id " + clientId + " already has medical history");
+        }
+
+        ClientEntity clientToUpdate = clientMapper.toEntity(clientService.findById(clientId));
+
         MedicalHistoryEntity medicalHistoryEntity = new MedicalHistoryEntity();
-        medicalHistoryEntity.setClient(clientMapper.toEntity(clientService.findById(clientId)));
+        medicalHistoryEntity.setClient(clientToUpdate);
         medicalHistoryEntity.setAnthropometry(request.getAnthropometry());
         medicalHistoryEntity.setGoals(request.getGoals());
         medicalHistoryEntity.setHypotheses(request.getGoals());
@@ -59,9 +65,9 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         medicalHistoryEntity.setDrinkingMode(request.getDrinkingMode());
         medicalHistoryEntity.setPhysicalActivity(request.getPhysicalActivity());
         medicalHistoryEntity.setSpecialConditions(request.getSpecialConditions());
+        clientToUpdate.setMedicalHistory(medicalHistoryEntity);
 
-
-        medicalHistoryRepository.save(medicalHistoryEntity);
+        clientService.updateClient(clientToUpdate);
     }
 
     @Override
@@ -90,17 +96,6 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                 , List.of("Антропометрия", "Режим жизни", "Жалобы", "Гипотезы"
                         , "Питание", "Питание", "Питьевой режим", "Физ.активность"
                         , ""));
-    }
-
-    @Override
-    public List<MedicalHistoryDTO> findAllMedicalHistoriesByCurrentUser() {
-        log.info("Attempting to find all medical histories");
-        return medicalHistoryRepository.findAllByClientUserUsername(SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getName())
-                .stream()
-                .map(medicalHistoryMapper::toDTO)
-                .toList();
     }
 
     @Override

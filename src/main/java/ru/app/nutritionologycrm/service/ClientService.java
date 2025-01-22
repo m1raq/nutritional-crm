@@ -3,6 +3,7 @@ package ru.app.nutritionologycrm.service;
 import ru.app.nutritionologycrm.dto.client.ClientCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.client.ClientDTO;
 import ru.app.nutritionologycrm.dto.client.ClientUpdateRequestDTO;
+import ru.app.nutritionologycrm.entity.ClientEntity;
 
 
 import java.util.List;
@@ -13,7 +14,9 @@ public interface ClientService {
 
     void updateClient(ClientUpdateRequestDTO update);
 
-    void updateClientStatus(Long id, String status);
+    void updateClient(ClientEntity update);
+
+    void updateClientStatus(Long id, Boolean status);
 
     List<ClientDTO> findAllByCurrentUser();
 

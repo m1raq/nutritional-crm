@@ -15,8 +15,6 @@ public interface MedicalHistoryService {
 
     String createMedicalHistoryQuestionnaire();
 
-    List<MedicalHistoryDTO> findAllMedicalHistoriesByCurrentUser();
-
     List<MedicalHistoryDTO> findAllByClientId(Long clientId);
 
     MedicalHistoryDTO findById(Long id);

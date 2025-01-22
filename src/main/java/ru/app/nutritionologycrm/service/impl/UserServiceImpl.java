@@ -12,6 +12,7 @@ import ru.app.nutritionologycrm.mapper.UserMapper;
 import ru.app.nutritionologycrm.repository.UserRepository;
 import ru.app.nutritionologycrm.service.UserService;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -77,4 +78,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
     }
+
+    @Override
+    public List<String> getSizes() {
+        return Arrays.asList("Small", "Medium", "Large", "Extra Large", "XXL");
+    }
+
 }

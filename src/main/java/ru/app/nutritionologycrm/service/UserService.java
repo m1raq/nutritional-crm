@@ -22,4 +22,5 @@ public interface UserService {
 
     UserDTO getCurrentUser();
 
+    List<String> getSizes();
 }
