@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public interface MedicalHistoryRepository extends JpaRepository<MedicalHistoryEntity, Long> {
 
-    List<MedicalHistoryEntity> findAllByClientUserUsername(String username);
-
     List<MedicalHistoryEntity> findAllByClientId(Long id);
+
+    Boolean existsByClientId(Long id);
 
 }
