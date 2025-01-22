@@ -52,7 +52,7 @@ public class ClientController {
     @Operation(summary = "Обновить статус клиента"
             , parameters = {@Parameter(name = "id", description = "Id обновляемого клиента")})
     @PutMapping("/update-status")
-    public ResponseEntity<ResponseMessageDTO> updateClientStatus(@RequestParam Long id, @RequestParam String status) {
+    public ResponseEntity<ResponseMessageDTO> updateClientStatus(@RequestParam Long id, @RequestParam Boolean status) {
         clientService.updateClientStatus(id, status);
         return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .message("Client status is updated")
@@ -62,28 +62,28 @@ public class ClientController {
     @Operation(summary = "Получить список клиентов текущего юзера")
     @GetMapping("/get-by-current-user")
     public ResponseEntity<List<ClientDTO>> getClientsByCurrentUser() {
-        return new ResponseEntity<>(clientService.findAllByCurrentUser(), HttpStatus.FOUND);
+        return new ResponseEntity<>(clientService.findAllByCurrentUser(), HttpStatus.OK);
     }
 
     @Operation(summary = "Поиск клиентов текущего юзера по имени"
             ,  parameters = {@Parameter(name = "name", description = "Имя клиента")})
     @GetMapping("/get-by-name")
     public ResponseEntity<List<ClientDTO>> getClientsByName(@RequestParam String name) {
-        return new ResponseEntity<>(clientService.findByName(name), HttpStatus.FOUND);
+        return new ResponseEntity<>(clientService.findByName(name), HttpStatus.OK);
     }
 
     @Operation(summary = "Поиск клиентов текущего юзера по контакту"
             , parameters = {@Parameter(name = "contacts", description = "Контакт клиента")})
     @GetMapping("/get-by-contacts")
     public ResponseEntity<ClientDTO> getClientsByContacts(@RequestParam String contacts) {
-        return new ResponseEntity<>(clientService.findByContacts(contacts), HttpStatus.FOUND);
+        return new ResponseEntity<>(clientService.findByContacts(contacts), HttpStatus.OK);
     }
 
     @Operation(summary = "Поиск клиентов текущего юзера по возрасту"
             , parameters = {@Parameter(name = "age", description = "Возраст клиента")})
     @GetMapping("/get-by-age")
     public ResponseEntity<List<ClientDTO>> getClientByAge(@RequestParam Integer age) {
-        return new ResponseEntity<>(clientService.findByAge(age), HttpStatus.FOUND);
+        return new ResponseEntity<>(clientService.findByAge(age), HttpStatus.OK);
     }
 
 }
