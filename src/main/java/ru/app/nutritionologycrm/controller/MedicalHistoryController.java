@@ -50,12 +50,6 @@ public class MedicalHistoryController {
                 .build(), HttpStatus.OK);
     }
 
-    @Operation(summary = "Получение всех анамнезов текущего юзера")
-    @GetMapping("/get-all")
-    public ResponseEntity<List<MedicalHistoryDTO>> getAllMedicalHistory() {
-        return new ResponseEntity<>(medicalHistoryService.findAllMedicalHistoriesByCurrentUser(), HttpStatus.OK);
-    }
-
     @Operation(summary = "Получение анамнезов по id клиента"
             , parameters = {@Parameter(name = "clientId", description = "Id клиента")})
     @GetMapping("/get-by-client-id")
