@@ -15,7 +15,7 @@ public class RestAPIExceptionHandler {
         return new ResponseEntity<>(ResponseMessageDTO.builder()
                 .success(false)
                 .message(e.getMessage())
-                .build(), HttpStatus.INTERNAL_SERVER_ERROR);
+                .build(), HttpStatus.BAD_REQUEST);
     }
 
 
