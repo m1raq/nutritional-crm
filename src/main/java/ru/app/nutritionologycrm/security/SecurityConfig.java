@@ -1,5 +1,6 @@
 package ru.app.nutritionologycrm.security;
 
+import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,13 +20,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.app.nutritionologycrm.security.jwt.JwtAuthenticationEntryPoint;
 import ru.app.nutritionologycrm.security.jwt.JwtTokenFilter;
-import ru.app.nutritionologycrm.service.impl.UserServiceImpl;
+import ru.app.nutritionologycrm.service.impl.UserServiceImpl;;
 
 
 @Configuration
-@EnableMethodSecurity
+@EnableMethodSecurity(jsr250Enabled = true)
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig extends VaadinWebSecurity {
 
     private final UserServiceImpl userDetailsService;
 
@@ -69,6 +70,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     SessionRegistry sessionRegistry() {
