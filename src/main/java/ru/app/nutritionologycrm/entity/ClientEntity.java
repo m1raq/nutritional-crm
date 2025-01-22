@@ -29,9 +29,8 @@ public class ClientEntity {
     @Column(name = "sex")
     private String sex;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private ClientStatus status;
+    private Boolean status;
 
     @Column(name = "tg_url")
     private String tgUrl;
@@ -41,7 +40,7 @@ public class ClientEntity {
     private UserEntity user;
 
     @JoinColumn(name = "medical_history_id")
-    @OneToOne()
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private MedicalHistoryEntity medicalHistory;
 
     @Column(name = "meet_id")
