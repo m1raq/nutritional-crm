@@ -21,8 +21,8 @@ public class ClientUpdateRequestDTO {
     @Schema(description = "Пол", example = "Мужской")
     private String sex;
 
-    @Schema(description = "Статус(Принимает только - Активный/Неактивный", example = "Активный")
-    private String status;
+    @Schema(description = "Статус", example = "false")
+    private Boolean status;
 
     @Schema(description = "Номер телефона", example = "89999999999")
     private String contacts;

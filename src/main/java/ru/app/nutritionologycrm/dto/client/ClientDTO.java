@@ -1,6 +1,7 @@
 package ru.app.nutritionologycrm.dto.client;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import ru.app.nutritionologycrm.dto.DocumentDTO;
@@ -9,10 +10,10 @@ import ru.app.nutritionologycrm.dto.biomarker.BiomarkerDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryDTO;
 import ru.app.nutritionologycrm.dto.meet.MeetDTO;
 import ru.app.nutritionologycrm.dto.recommendation.RecommendationDTO;
-import ru.app.nutritionologycrm.entity.*;
 
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Data
 public class ClientDTO {
@@ -27,7 +28,7 @@ public class ClientDTO {
 
     private String sex;
 
-    private ClientStatus status;
+    private Boolean status;
 
     private String tgUrl;
 

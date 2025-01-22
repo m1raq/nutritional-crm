@@ -22,8 +22,8 @@ public class ClientCreateRequestDTO {
     @Schema(description = "Пол", example = "Мужской")
     private String sex;
 
-    @Schema(description = "Статус(Принимает только - Активный/Неактивный", example = "Активный")
-    private String status;
+    @Schema(description = "Статус", example = "true")
+    private Boolean status;
 
     @Schema(description = "Ссылка на telegram-чат")
     private String tgUrl;
