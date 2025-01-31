@@ -15,31 +15,31 @@ public class MedicalHistoryEntity {
     @Id
     private Long id;
 
-    @Column(name = "anthropometry", nullable = false)
+    @Column(name = "anthropometry")
     private String anthropometry;
 
-    @Column(name = "life_mode", nullable = false)
+    @Column(name = "life_mode")
     private String lifeMode;
 
-    @Column(name = "complaints", nullable = false)
+    @Column(name = "complaints")
     private String complaints;
 
-    @Column(name = "hypotheses", nullable = false)
+    @Column(name = "hypotheses")
     private String hypotheses;
 
-    @Column(name = "nutrition", nullable = false)
+    @Column(name = "nutrition")
     private String nutrition;
 
-    @Column(name = "drinking_mode", nullable = false)
+    @Column(name = "drinking_mode")
     private String drinkingMode;
 
-    @Column(name = "physical_activity", nullable = false)
+    @Column(name = "physical_activity")
     private String physicalActivity;
 
-    @Column(name = "goals", nullable = false)
+    @Column(name = "goals")
     private String goals;
 
-    @Column(name = "special_conditions", nullable = false)
+    @Column(name = "special_conditions")
     private String specialConditions;
 
     @OneToOne(mappedBy = "medicalHistory")

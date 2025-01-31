@@ -3,9 +3,8 @@ package ru.app.nutritionologycrm.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Setter
 @Getter
@@ -37,7 +36,7 @@ public class BiomarkerEntity {
     private String unit;
 
     @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    private LocalDate date;
 
     @JoinColumn(name = "client_id")
     @ManyToOne

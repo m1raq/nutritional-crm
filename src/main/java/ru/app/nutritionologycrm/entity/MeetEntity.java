@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -17,8 +17,11 @@ public class MeetEntity {
     @Id
     private Long id;
 
-    @Column(name = "date")
-    private Date date;
+    @Column(name = "start")
+    private LocalDateTime start;
+
+    @Column(name = "`end`")
+    private LocalDateTime end;
 
     @Column(name = "place")
     private String place;

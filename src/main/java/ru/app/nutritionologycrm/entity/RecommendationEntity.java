@@ -15,6 +15,9 @@ public class RecommendationEntity {
     @Id
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "food_recommendation")
     private String foodRecommendation;
 
