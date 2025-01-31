@@ -24,7 +24,9 @@
 2) Запустите Docker
 3) Перейдите в директорию проекта и откройте WindowsPowershell в ней
 4) Введите следующие команды:
-<somecode>./gradlew clean</somecode>
+```rb
+./gradlew clean
+```
 <somecode>npm install</somecode>
 <somecode>./gradlew build</somecode>
 <somecode>docker-compose up --build</somecode>
