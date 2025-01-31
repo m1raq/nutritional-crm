@@ -1,4 +1,12 @@
-FROM ubuntu:latest
-LABEL authors="miraq"
+FROM openjdk:17
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR /app
+COPY build/libs/nutritionology-crm-0.0.1-SNAPSHOT.jar app.jar
+
+RUN useradd -m appuser && \
+    mkdir -p /app/uploaded-files && \
+    chown -R appuser:appuser /app/uploaded-files
+USER appuser
+
+EXPOSE 8081
+CMD ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
