@@ -15,6 +15,8 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     ClientEntity findByContacts(String contacts);
 
+    ClientEntity findByTgBotChatId(String tgBotChatId);
+
     List<ClientEntity> findAllByAge(Integer age);
 
     @Transactional
@@ -27,4 +29,10 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
     List<ClientEntity> findAllByUserUsername(String username);
 
     List<ClientEntity> findAllByNameAndUserUsername(String name, String username);
+
+    Boolean existsByTgBotChatId(String tgBotChatId);
+
+
+
 }
+

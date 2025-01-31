@@ -13,4 +13,7 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistoryEn
 
     Boolean existsByClientId(Long id);
 
+    MedicalHistoryEntity findByClientId(Long id);
+
+
 }
