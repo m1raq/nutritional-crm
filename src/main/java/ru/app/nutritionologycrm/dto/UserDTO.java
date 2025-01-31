@@ -1,6 +1,5 @@
 package ru.app.nutritionologycrm.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import ru.app.nutritionologycrm.dto.biomarker.BiomarkerDTO;
@@ -11,7 +10,6 @@ import ru.app.nutritionologycrm.entity.*;
 
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Builder
 public class UserDTO {

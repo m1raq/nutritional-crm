@@ -1,14 +1,11 @@
 package ru.app.nutritionologycrm.dto;
 
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import ru.app.nutritionologycrm.dto.client.ClientDTO;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Data
 public class DocumentDTO {
@@ -17,7 +14,7 @@ public class DocumentDTO {
 
     private String name;
 
-    private Date date;
+    private LocalDate date;
 
     private UserDTO user;
 

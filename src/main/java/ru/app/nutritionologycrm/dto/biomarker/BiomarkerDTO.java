@@ -1,14 +1,12 @@
 package ru.app.nutritionologycrm.dto.biomarker;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import ru.app.nutritionologycrm.dto.UserDTO;
 import ru.app.nutritionologycrm.dto.client.ClientDTO;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Builder
 public class BiomarkerDTO {
@@ -27,7 +25,7 @@ public class BiomarkerDTO {
 
     private String unit;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     private ClientDTO client;
 

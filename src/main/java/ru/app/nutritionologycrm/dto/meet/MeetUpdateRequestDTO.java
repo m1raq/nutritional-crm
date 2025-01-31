@@ -1,25 +1,21 @@
 package ru.app.nutritionologycrm.dto.meet;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-@Schema(name = "Тело для обновления встречи")
 @Data
 @Builder
 public class MeetUpdateRequestDTO {
 
-    @Schema(description = "Id существующей встречи")
     private Long id;
 
-    @Schema(description = "Дата встречи")
-    private Date date;
+    private LocalDateTime start;
 
-    @Schema(description = "Место встречи")
+    private LocalDateTime end;
+
     private String place;
 
-    @Schema(description = "Продолжительность встречи")
     private String duration;
 }
