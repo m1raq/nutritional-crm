@@ -9,8 +9,8 @@ import ru.app.nutritionologycrm.entity.BiomarkerEntity;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BiomarkerMapper {
 
-    @Mapping(target = "user", ignore = true)
     @Mapping(target = "client", ignore = true)
+    @Mapping(target = "user", ignore = true)
     BiomarkerDTO toDTO(BiomarkerEntity entity);
 
     BiomarkerEntity toEntity(BiomarkerDTO dto);
