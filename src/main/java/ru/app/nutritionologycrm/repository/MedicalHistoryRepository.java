@@ -11,8 +11,6 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistoryEn
 
     List<MedicalHistoryEntity> findAllByClientId(Long id);
 
-    Boolean existsByClientId(Long id);
-
     MedicalHistoryEntity findByClientId(Long id);
 
 

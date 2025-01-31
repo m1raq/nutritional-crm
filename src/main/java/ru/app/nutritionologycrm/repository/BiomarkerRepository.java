@@ -9,8 +9,6 @@ import java.util.List;
 @Repository
 public interface BiomarkerRepository extends JpaRepository<BiomarkerEntity, Long> {
 
-    List<BiomarkerEntity> findAllByUserUsername(String username);
-
     List<BiomarkerEntity> findAllByClientId(Long id);
 
 }
