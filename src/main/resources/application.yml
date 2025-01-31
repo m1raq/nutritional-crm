@@ -30,3 +30,7 @@ security:
     secret: secretKeyjsdjpafjlw3ejk323423zdfasfqweqweadasfsdfzxcxzcaqwsedrfqwerffdadsfabvfgqrtyertuyulyjkhj
     jwtRefreshExpirationMs: 120000
 
+bot:
+  token: YOUR_BOT_TOKEN
+  username: YOUR_BOT_USERNAME
+
