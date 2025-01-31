@@ -27,9 +27,15 @@
 ```rb
 ./gradlew clean
 ```
-<somecode>npm install</somecode>
-<somecode>./gradlew build</somecode>
-<somecode>docker-compose up --build</somecode>
+```rb
+npm install
+```
+```rb
+./gradlew build
+```
+```rb
+docker-compose up --build
+```
 
 ## Статус проекта и его будущее
 Проект разрабатывался в коммерческих целях. Возможно в будущем будет поддерживаться и развиваться.
