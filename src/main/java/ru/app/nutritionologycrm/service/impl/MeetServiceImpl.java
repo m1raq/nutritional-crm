@@ -2,7 +2,6 @@ package ru.app.nutritionologycrm.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.app.nutritionologycrm.dto.meet.MeetCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.meet.MeetDTO;
@@ -45,39 +44,33 @@ public class MeetServiceImpl implements MeetService {
 
 
     @Override
-    public void save(MeetCreateRequestDTO request, Long clientId) {
+    public void save(MeetCreateRequestDTO request, Long clientId, String userUsername) throws Exception {
         log.info("Attempt to create meet");
 
-        if (meetRepository.existsByDate(request.getDate())) {
-            throw new EntityProcessingException("Meet with this date already exists");
+        if (meetRepository.existsByStartAndEndAndUserUsername(request.getStart(), request.getEnd(), userUsername)) {
+            throw new Exception("Meet with this date already exists");
         }
 
         MeetEntity meet = new MeetEntity();
-        meet.setDate(request.getDate());
+        meet.setStart(request.getStart());
+        meet.setEnd(request.getEnd());
         meet.setDuration(request.getDuration());
         meet.setPlace(request.getPlace());
         meet.setClient(clientMapper.toEntity(clientService.findById(clientId)));
-        meet.setUser(userService.findByUsername(SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName()));
+        meet.setUser(userService.findByUsername(userUsername));
 
         meetRepository.save(meet);
     }
 
     @Override
-    public void update(MeetUpdateRequestDTO updates) {
+    public void update(MeetUpdateRequestDTO updates, String userUsername) {
         log.info("Attempt to update meet {}", updates.getId());
 
         MeetEntity meet = meetRepository.findById(updates.getId())
                 .orElseThrow(() -> new EntityProcessingException("Meet with this id does not exist"));
 
-        if (meetRepository.existsByDate(updates.getDate())
-                && !meetRepository.existsByDateAndId(updates.getDate(), updates.getId())
-                && !meet.getDate().equals(updates.getDate())) {
-            throw new EntityProcessingException("Meet with this date already exists");
-        }
-
-        meet.setDate(updates.getDate());
+        meet.setStart(updates.getStart());
+        meet.setEnd(updates.getEnd());
         meet.setDuration(updates.getDuration());
         meet.setPlace(updates.getPlace());
         meetRepository.save(meet);

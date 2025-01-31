@@ -4,17 +4,12 @@ package ru.app.nutritionologycrm.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryDTO;
 import ru.app.nutritionologycrm.dto.medical.history.MedicalHistoryUpdateRequestDTO;
-import ru.app.nutritionologycrm.entity.ClientEntity;
 import ru.app.nutritionologycrm.entity.MedicalHistoryEntity;
 import ru.app.nutritionologycrm.exception.EntityProcessingException;
-import ru.app.nutritionologycrm.mapper.ClientMapper;
 import ru.app.nutritionologycrm.mapper.MedicalHistoryMapper;
 import ru.app.nutritionologycrm.repository.MedicalHistoryRepository;
-import ru.app.nutritionologycrm.service.ClientService;
-import ru.app.nutritionologycrm.service.GoogleFormsService;
 import ru.app.nutritionologycrm.service.MedicalHistoryService;
 
 import java.util.List;
@@ -23,52 +18,18 @@ import java.util.List;
 @Service
 public class MedicalHistoryServiceImpl implements MedicalHistoryService {
 
-    private final GoogleFormsService googleFormsService;
-
     private final MedicalHistoryRepository medicalHistoryRepository;
 
     private final MedicalHistoryMapper medicalHistoryMapper;
 
-    private final ClientMapper clientMapper;
-
-    private final ClientService clientService;
 
     @Autowired
-    public MedicalHistoryServiceImpl(GoogleFormsService googleFormsService
-            , MedicalHistoryRepository medicalHistoryRepository, MedicalHistoryMapper medicalHistoryMapper
-            , ClientMapper clientMapper, ClientService clientService) {
-        this.googleFormsService = googleFormsService;
+    public MedicalHistoryServiceImpl(MedicalHistoryRepository medicalHistoryRepository
+            , MedicalHistoryMapper medicalHistoryMapper) {
         this.medicalHistoryRepository = medicalHistoryRepository;
         this.medicalHistoryMapper = medicalHistoryMapper;
-        this.clientMapper = clientMapper;
-        this.clientService = clientService;
     }
 
-    @Override
-    public void saveMedicalHistory(MedicalHistoryCreateRequestDTO request, Long clientId) {
-        log.info("Attempting to save medical history");
-
-        if (medicalHistoryRepository.existsByClientId(clientId)) {
-            throw new EntityProcessingException("Client with id " + clientId + " already has medical history");
-        }
-
-        ClientEntity clientToUpdate = clientMapper.toEntity(clientService.findById(clientId));
-
-        MedicalHistoryEntity medicalHistoryEntity = new MedicalHistoryEntity();
-        medicalHistoryEntity.setClient(clientToUpdate);
-        medicalHistoryEntity.setAnthropometry(request.getAnthropometry());
-        medicalHistoryEntity.setGoals(request.getGoals());
-        medicalHistoryEntity.setHypotheses(request.getGoals());
-        medicalHistoryEntity.setLifeMode(request.getLifeMode());
-        medicalHistoryEntity.setComplaints(request.getComplaints());
-        medicalHistoryEntity.setNutrition(request.getNutrition());
-        medicalHistoryEntity.setDrinkingMode(request.getDrinkingMode());
-        medicalHistoryEntity.setPhysicalActivity(request.getPhysicalActivity());
-        medicalHistoryEntity.setSpecialConditions(request.getSpecialConditions());
-        clientToUpdate.setMedicalHistory(medicalHistoryEntity);
-
-        clientService.updateClient(clientToUpdate);
-    }
 
     @Override
     public void updateMedicalHistory(MedicalHistoryUpdateRequestDTO updates) {
@@ -90,20 +51,16 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     }
 
     @Override
-    public String createMedicalHistoryQuestionnaire() {
-        return googleFormsService.createQuestion(googleFormsService
-                .createForm("asd", "Анамнез")
-                , List.of("Антропометрия", "Режим жизни", "Жалобы", "Гипотезы"
-                        , "Питание", "Питание", "Питьевой режим", "Физ.активность"
-                        , ""));
-    }
-
-    @Override
     public List<MedicalHistoryDTO> findAllByClientId(Long clientId) {
         return medicalHistoryRepository.findAllByClientId(clientId)
                 .stream()
                 .map(medicalHistoryMapper::toDTO)
                 .toList();
+    }
+
+    @Override
+    public MedicalHistoryDTO findByClientId(Long clientId) {
+        return medicalHistoryMapper.toDTO(medicalHistoryRepository.findByClientId(clientId));
     }
 
     @Override

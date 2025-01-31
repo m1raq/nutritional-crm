@@ -48,6 +48,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         log.info("Attempt to save recommendation");
 
         RecommendationEntity recommendation = new RecommendationEntity();
+        recommendation.setName(request.getName());
         recommendation.setFoodRecommendation(request.getFoodRecommendation());
         recommendation.setDrinkingMode(request.getDrinkingMode());
         recommendation.setNutraceuticals(request.getNutraceuticals());
@@ -87,5 +88,10 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .stream()
                 .map(recommendationMapper::toDTO)
                 .toList();
+    }
+
+    @Override
+    public RecommendationDTO findRecommendationById(Long id) {
+        return recommendationMapper.toDTO(recommendationRepository.findById(id).orElseThrow());
     }
 }

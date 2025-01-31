@@ -13,7 +13,7 @@ public interface BiomarkerService {
 
     void updateBiomarker(BiomarkerUpdateRequestDTO updates);
 
-    List<BiomarkerDTO> findAllBiomarkersByCurrentUser();
+    BiomarkerDTO findBiomarkerById(Long id);
 
     List<BiomarkerDTO> findAllBiomarkersByClientId(Long clientId);
 

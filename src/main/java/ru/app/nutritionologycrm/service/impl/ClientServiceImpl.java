@@ -8,6 +8,7 @@ import ru.app.nutritionologycrm.dto.client.ClientCreateRequestDTO;
 import ru.app.nutritionologycrm.dto.client.ClientDTO;
 import ru.app.nutritionologycrm.dto.client.ClientUpdateRequestDTO;
 import ru.app.nutritionologycrm.entity.ClientEntity;
+import ru.app.nutritionologycrm.entity.MedicalHistoryEntity;
 import ru.app.nutritionologycrm.exception.EntityProcessingException;
 import ru.app.nutritionologycrm.mapper.ClientMapper;
 import ru.app.nutritionologycrm.repository.ClientRepository;
@@ -54,8 +55,21 @@ public class ClientServiceImpl implements ClientService {
                 .getAuthentication()
                 .getName()));
 
-        clientRepository.save(clientEntity);
+        MedicalHistoryEntity medicalHistoryEntity = new MedicalHistoryEntity();
+        clientEntity.setMedicalHistory(medicalHistoryEntity);
 
+        medicalHistoryEntity.setClient(clientEntity);
+        medicalHistoryEntity.setComplaints("");
+        medicalHistoryEntity.setAnthropometry("");
+        medicalHistoryEntity.setLifeMode("");
+        medicalHistoryEntity.setHypotheses("");
+        medicalHistoryEntity.setNutrition("");
+        medicalHistoryEntity.setDrinkingMode("");
+        medicalHistoryEntity.setPhysicalActivity("");
+        medicalHistoryEntity.setGoals("");
+        medicalHistoryEntity.setSpecialConditions("");
+
+        clientRepository.save(clientEntity);
     }
     @Override
     public void updateClient(ClientUpdateRequestDTO update) {
@@ -68,7 +82,7 @@ public class ClientServiceImpl implements ClientService {
         clientToUpdate.setName(update.getName());
         clientToUpdate.setAge(update.getAge());
         clientToUpdate.setSex(update.getSex());
-        clientToUpdate.setStatus(update.getStatus());
+        clientToUpdate.setStatus(update.getStatus().equals("Активный"));
         clientToUpdate.setContacts(update.getContacts());
         clientToUpdate.setTgUrl(update.getTgUrl());
         clientToUpdate.setUser(userService.findByUsername(SecurityContextHolder.getContext()
@@ -79,18 +93,24 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void updateClient(ClientEntity update) {
-        log.info("Attempt to update client {}", update.getId());
-        clientRepository.save(update);
+    public void updateClient(ClientDTO update) {
+        clientRepository.save(clientMapper.toEntity(update));
     }
 
     @Override
-    public void updateClientStatus(Long id, Boolean status) {
-        log.info("Attempt to update client {} status", id);
-        if (!clientRepository.existsById(id)) {
-            throw new EntityProcessingException("Client with id " + id + " doesn't exist");
-        }
-        clientRepository.updateStatusById(id, status);
+    public ClientDTO findByTgBotChatId(String tgBotChatId) {
+        return clientMapper.toDTO(clientRepository.findByTgBotChatId(tgBotChatId));
+    }
+
+    @Override
+    public Boolean existsByTgBotChatId(String tgBotChatId) {
+        return clientRepository.existsByTgBotChatId(tgBotChatId);
+    }
+
+    @Override
+    public void updateClient(ClientEntity update) {
+        log.info("Attempt to update client {}", update.getId());
+        clientRepository.save(update);
     }
 
     @Override
@@ -99,32 +119,6 @@ public class ClientServiceImpl implements ClientService {
                 .getAuthentication()
                 .getName());
         return clientRepository.findAllByUserUsername(SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName())
-                .stream()
-                .map(clientMapper::toDTO)
-                .toList();
-    }
-
-    @Override
-    public ClientDTO findByContacts(String contacts) {
-        log.info("Attempt to find client by contacts {}", contacts);
-        return clientMapper.toDTO(clientRepository.findByContacts(contacts));
-    }
-
-    @Override
-    public List<ClientDTO> findByAge(Integer age) {
-        log.info("Attempt to find clients by age {}", age);
-        return clientRepository.findAllByAge(age)
-                .stream()
-                .map(clientMapper::toDTO)
-                .toList();
-    }
-
-    @Override
-    public List<ClientDTO> findByName(String name) {
-        log.info("Attempt to find client by name {}", name);
-        return clientRepository.findAllByNameAndUserUsername(name, SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName())
                 .stream()

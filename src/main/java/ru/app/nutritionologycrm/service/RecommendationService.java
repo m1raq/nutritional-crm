@@ -14,4 +14,5 @@ public interface RecommendationService {
 
     List<RecommendationDTO> findRecommendationByClientId(Long clientId);
 
+    RecommendationDTO findRecommendationById(Long id);
 }

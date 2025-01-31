@@ -78,16 +78,13 @@ public class BiomarkerServiceImpl implements BiomarkerService {
         biomarkerRepository.save(biomarker);
     }
 
-    //TODO: Доработать сортировку по дате
     @Override
-    public List<BiomarkerDTO> findAllBiomarkersByCurrentUser() {
-        return biomarkerRepository.findAllByUserUsername(SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName())
-                .stream()
-                .map(biomarkerMapper::toDTO)
-                .toList();
+    public BiomarkerDTO findBiomarkerById(Long id) {
+        return biomarkerMapper.toDTO(biomarkerRepository.findById(id)
+                .orElseThrow(()
+                        -> new EntityProcessingException("Biomarker with id " + id + " doesn't exists")));
     }
+
 
     @Override
     public List<BiomarkerDTO> findAllBiomarkersByClientId(Long clientId) {

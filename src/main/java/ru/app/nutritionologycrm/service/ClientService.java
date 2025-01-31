@@ -14,17 +14,15 @@ public interface ClientService {
 
     void updateClient(ClientUpdateRequestDTO update);
 
+    void updateClient(ClientDTO update);
+
+    ClientDTO findByTgBotChatId(String tgBotChatId);
+
+    Boolean existsByTgBotChatId(String tgBotChatId);
+
     void updateClient(ClientEntity update);
 
-    void updateClientStatus(Long id, Boolean status);
-
     List<ClientDTO> findAllByCurrentUser();
-
-    ClientDTO findByContacts(String contacts);
-
-    List<ClientDTO> findByAge(Integer age);
-
-    List<ClientDTO> findByName(String name);
 
     ClientDTO findById(Long id);
 }
