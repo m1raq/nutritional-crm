@@ -12,19 +12,17 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.app.nutritionologycrm.frontend.page.login.LoginView;
 import ru.app.nutritionologycrm.security.jwt.JwtAuthenticationEntryPoint;
 import ru.app.nutritionologycrm.security.jwt.JwtTokenFilter;
-import ru.app.nutritionologycrm.service.impl.UserServiceImpl;;
+import ru.app.nutritionologycrm.service.impl.UserServiceImpl;
 
 
 @Configuration
-@EnableMethodSecurity(jsr250Enabled = true)
+@EnableMethodSecurity()
 @RequiredArgsConstructor
 public class SecurityConfig extends VaadinWebSecurity {
 
@@ -34,7 +32,6 @@ public class SecurityConfig extends VaadinWebSecurity {
 
     private final JwtTokenFilter jwtTokenFilter;
 
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -42,38 +39,28 @@ public class SecurityConfig extends VaadinWebSecurity {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration auditingConfiguration) throws Exception{
         return auditingConfiguration.getAuthenticationManager();
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .anyRequest().authenticated())
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/public/**").permitAll())
                 .exceptionHandling(configurer -> configurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        super.configure(http);
 
-
-        return http.build();
-    }
-
-
-    @Bean
-    SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
+        setLoginView(http, LoginView.class);
     }
 }

@@ -19,26 +19,18 @@ public class RefreshTokenService {
 
     @Value("${security.jwt.jwtRefreshExpirationMs}")
     private Duration refreshTokenExpiration;
-
     private final RefreshTokenRepository refreshTokenRepository;
-
-
     public Optional<RefreshTokenEntity> findByRefreshToken(String token){
         return refreshTokenRepository.findByToken(token);
     }
-
     public RefreshTokenEntity createRefreshToken(Long userId){
-
         RefreshTokenEntity refreshToken = new RefreshTokenEntity();
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenExpiration.toMillis()));
         refreshToken.setUserId(userId);
         refreshTokenRepository.save(refreshToken);
-
         return refreshToken;
     }
-
-
     public RefreshTokenEntity checkRefreshToken(RefreshTokenEntity token){
         if(token.getExpiryDate().compareTo(Instant.now()) < 0){
             refreshTokenRepository.delete(token);

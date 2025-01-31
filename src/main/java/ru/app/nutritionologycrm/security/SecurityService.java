@@ -56,37 +56,38 @@ public class SecurityService {
     }
 
     public AuthResponseDTO authenticateUser(AuthRequestDTO authRequestDTO){
+        log.info("Попытка аутентификации под адресом {}", authRequestDTO.getUsername());
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authRequestDTO.getUsername(),
                 authRequestDTO.getPassword()
         ));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserEntity userDetails = (UserEntity) authentication.getPrincipal();
-
         List<String> roles = userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
         RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
-        return AuthResponseDTO.builder()
+        AuthResponseDTO response = AuthResponseDTO.builder()
                 .id(userDetails.getId())
                 .token(jwtUtils.generateJwtToken(userDetails))
                 .refreshToken(refreshToken.getToken())
                 .username(userDetails.getUsername())
                 .roles(roles)
                 .build();
-    }
 
+        if (response.getToken() != null) {
+            log.info("Аутентификация под юзером {} прошла успешно", response.getUsername());
+        }
+        return response;
+    }
 
     public void register(AuthRequestDTO authRequestDTO) {
         log.info("Попытка регистрации под адресом {}", authRequestDTO.getUsername());
-
         if (userRepository.existsByUsername(authRequestDTO.getUsername())) {
             throw new EntityProcessingException("Пользователь с таким email уже существует");
         }
-
         UserEntity user = new UserEntity();
         user.setUsername(authRequestDTO.getUsername());
         user.setPassword(passwordEncoder.encode(authRequestDTO.getPassword()));
@@ -97,12 +98,26 @@ public class SecurityService {
         user.setRecommendations(new ArrayList<>());
         user.setRole(RoleType.ROLE_USER);
         userRepository.save(user);
-
     }
+
+    public void register(UserEntity user) {
+        log.info("Попытка регистрации под адресом {}", user.getUsername());
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new EntityProcessingException("Пользователь с таким email уже существует");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setClients(new ArrayList<>());
+        user.setDocuments(new ArrayList<>());
+        user.setMeets(new ArrayList<>());
+        user.setBiomarkers(new ArrayList<>());
+        user.setRecommendations(new ArrayList<>());
+        user.setRole(RoleType.ROLE_USER);
+        userRepository.save(user);
+    }
+
 
     public RefreshTokenResponseDTO refreshToken(RefreshTokenRequestDTO request){
         String requestRefreshToken = request.getRefreshToken();
-
         try {
             return refreshTokenService.findByRefreshToken(requestRefreshToken)
                     .map(refreshTokenService::checkRefreshToken)
@@ -119,7 +134,6 @@ public class SecurityService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
 }

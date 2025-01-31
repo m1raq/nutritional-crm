@@ -15,14 +15,11 @@ public class JwtUtils {
 
     @Value("${security.jwt.secret}")
     private String jwtSecret;
-
     @Value("${security.jwt.expiration}")
     private Duration jwtExpiration;
-
     public String generateJwtToken(UserEntity userDetails) {
         return generateTokenFromUsername(userDetails.getUsername());
     }
-
     public String generateTokenFromUsername(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -31,12 +28,10 @@ public class JwtUtils {
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
-
     public String getUsername(String token){
         return Jwts.parser().setSigningKey(jwtSecret)
                 .parseClaimsJws(token).getBody().getSubject();
     }
-
     public boolean validate(String authToken){
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
@@ -54,6 +49,7 @@ public class JwtUtils {
         }
         return false;
     }
+
 
 
 }

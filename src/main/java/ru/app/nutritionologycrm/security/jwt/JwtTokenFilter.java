@@ -25,10 +25,7 @@ import java.io.IOException;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-
     private final UserServiceImpl userDetailsService;
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
@@ -38,26 +35,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 UserEntity userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken
                         = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
             }
         } catch (Exception ex) {
             log.error("Cannot set user auth: {}", ex.getMessage());
         }
-
         filterChain.doFilter(request, response);
     }
-
     private String getToken(HttpServletRequest request) {
         String headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
-
         if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
             return headerAuth.substring(7);
         }
-
         return null;
     }
 
