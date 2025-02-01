@@ -1,6 +1,7 @@
 package ru.app.nutritionologycrm.frontend.page.login;
 
 import com.vaadin.flow.component.HasValueAndElement;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H3;
@@ -27,6 +28,8 @@ public class LoginForm extends VerticalLayout {
 
     private Button loginButton;
 
+    private Button registerButton;
+
     private Span errorMessageField;
 
     public LoginForm() {
@@ -37,12 +40,18 @@ public class LoginForm extends VerticalLayout {
         loginButton = new Button("Login");
         loginButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        registerButton = new Button("Регистрация");
+        registerButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        registerButton.addClickListener(e -> {
+            UI.getCurrent().navigate("registration");
+        });
+
         setRequiredIndicatorVisible(username, password);
         errorMessageField = new Span();
         username.setWidth("300px");
         loginButton.setWidth("300px");
         password.setWidth("300px");
-        add(title, username, password, errorMessageField, loginButton);
+        add(title, username, password, errorMessageField, loginButton, registerButton);
         setMaxWidth("500px");
     }
 

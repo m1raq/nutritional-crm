@@ -47,7 +47,7 @@ public class MeetServiceImpl implements MeetService {
     public void save(MeetCreateRequestDTO request, Long clientId, String userUsername) throws Exception {
         log.info("Attempt to create meet");
 
-        if (meetRepository.existsByStartAndEndAndUserUsername(request.getStart(), request.getEnd(), userUsername)) {
+        if (meetRepository.existsByStartAndUserUsername(request.getStart(), userUsername)) {
             throw new Exception("Meet with this date already exists");
         }
 
@@ -63,11 +63,16 @@ public class MeetServiceImpl implements MeetService {
     }
 
     @Override
-    public void update(MeetUpdateRequestDTO updates, String userUsername) {
+    public void update(MeetUpdateRequestDTO updates, String userUsername) throws Exception {
         log.info("Attempt to update meet {}", updates.getId());
 
         MeetEntity meet = meetRepository.findById(updates.getId())
                 .orElseThrow(() -> new EntityProcessingException("Meet with this id does not exist"));
+
+        if (!updates.getStart().isEqual(meet.getStart())
+                && meetRepository.existsByStartAndUserUsername(updates.getStart(), userUsername)) {
+            throw new Exception("Meet with this date already exists");
+        }
 
         meet.setStart(updates.getStart());
         meet.setEnd(updates.getEnd());

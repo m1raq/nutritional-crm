@@ -12,7 +12,7 @@ import ru.app.nutritionologycrm.security.SecurityService;
 @AnonymousAllowed
 @PreserveOnRefresh
 @Component
-@PageTitle("Registration")
+@PageTitle("Регистрация")
 @Route("registration")
 public class RegistrationView extends VerticalLayout {
 

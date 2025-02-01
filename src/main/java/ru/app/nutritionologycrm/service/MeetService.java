@@ -11,7 +11,7 @@ public interface MeetService {
 
     void save(MeetCreateRequestDTO request, Long clientId, String userUsername) throws Exception;
 
-    void update(MeetUpdateRequestDTO updates, String userUsername);
+    void update(MeetUpdateRequestDTO updates, String userUsername) throws Exception;
 
     List<MeetDTO> findAllByClientId(Long id);
 

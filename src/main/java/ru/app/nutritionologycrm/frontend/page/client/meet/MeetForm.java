@@ -223,7 +223,10 @@ public class MeetForm extends HorizontalLayout {
                 calendar.getEntryProvider().asInMemory().addEntries(tableEntry);
                 calendar.getEntryProvider().refreshAll();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                Notification notification = VaadinComponentBuilder
+                        .buildNotification("Встреча на данное время уже существует"
+                                , NotificationVariant.LUMO_ERROR);
+                notification.open();
             } finally {
                 dialog.close();
             }

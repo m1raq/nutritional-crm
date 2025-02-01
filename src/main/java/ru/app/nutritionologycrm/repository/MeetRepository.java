@@ -13,6 +13,6 @@ public interface MeetRepository extends JpaRepository<MeetEntity, Long> {
 
     List<MeetEntity> findAllByClientId(Long id);
 
-    Boolean existsByStartAndEndAndUserUsername(LocalDateTime start, LocalDateTime end, String username);
+    Boolean existsByStartAndUserUsername(LocalDateTime start, String username);
 
 }

@@ -10,6 +10,7 @@ import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.router.RouteParam;
 import com.vaadin.flow.router.RouteParameters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.app.nutritionologycrm.dto.security.AuthRequestDTO;
@@ -90,6 +91,7 @@ public class LoginFormBinder {
                 Notification.show("Welcome " + userBean.getUsername());
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 
+        ClientListView.initSecurity(SecurityContextHolder.getContext());
         UI.getCurrent().navigate(ClientListView.class
                 , new RouteParameters(new RouteParam("query", "active")));
     }

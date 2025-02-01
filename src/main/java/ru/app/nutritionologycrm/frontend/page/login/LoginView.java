@@ -13,7 +13,7 @@ import ru.app.nutritionologycrm.service.ClientService;
 @AnonymousAllowed
 @PreserveOnRefresh
 @Component
-@PageTitle("Login")
+@PageTitle("Логин")
 @Route("login")
 public class LoginView extends VerticalLayout {
 
